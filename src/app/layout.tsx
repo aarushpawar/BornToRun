@@ -1,4 +1,5 @@
 import "@/styles/globals.css";
+import { GameProvider } from '../components/GameProvider';
 
 export const metadata = {
   title: "Born to Run RPG",
@@ -12,7 +13,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <GameProvider>
+          {children}
+        </GameProvider>
+      </body>
     </html>
   );
 }
