@@ -1,4 +1,4 @@
- runimport { Race } from '../../types/game';
+import { Race } from '../../types/game';
 
 const leadville100: Race = {
   id: 'leadville_100',
