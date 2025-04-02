@@ -1,4 +1,4 @@
-npm riimport { Character } from '../../types/game';
+import { Character } from '../../types/game';
 
 const billyBarnett: Character = {
   id: 'billy_barnett',
