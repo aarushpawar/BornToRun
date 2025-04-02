@@ -4,21 +4,23 @@ import Image from 'next/image';
 
 export default function QRCodePage() {
   const handleFullscreenClick = () => {
-    const element = document.documentElement as any;
-    if (element.requestFullscreen) {
-      element.requestFullscreen();
-    } else if (element.mozRequestFullScreen) { // Firefox
-      element.mozRequestFullScreen();
-    } else if (element.webkitRequestFullscreen) { // Chrome, Safari and Opera
-      element.webkitRequestFullscreen();
-    } else if (element.msRequestFullscreen) { // IE/Edge
-      element.msRequestFullscreen();
+    if (!document.fullscreenElement) {
+      const element = document.documentElement as any;
+      if (element.requestFullscreen) {
+        element.requestFullscreen();
+      } else if (element.mozRequestFullScreen) { // Firefox
+        element.mozRequestFullScreen();
+      } else if (element.webkitRequestFullscreen) { // Chrome, Safari and Opera
+        element.webkitRequestFullscreen();
+      } else if (element.msRequestFullscreen) { // IE/Edge
+        element.msRequestFullscreen();
+      }
     }
   };
 
   return (
     <div
-      className="flex flex-col justify-center items-center h-screen p-4 text-center"
+      className="flex flex-col justify-center items-center h-screen p-4 text-center cursor-pointer"
       onClick={handleFullscreenClick}
     >
       <h1 className="text-2xl font-bold mb-4">Born To Run</h1>
