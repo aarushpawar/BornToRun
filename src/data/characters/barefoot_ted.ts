@@ -9,6 +9,7 @@ const barefootTed: Character = {
   technique: 85,  // High technique due to barefoot focus, but injury prone
   heatResistance: 60, // Less adapted
   experience: 65, // Enthusiastic, but newer to this level
+  image: '/images/characters/barefoot ted.avif', // Corrected image path
 };
 
 export default barefootTed;

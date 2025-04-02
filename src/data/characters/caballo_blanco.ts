@@ -9,6 +9,7 @@ const caballoBlanco: Character = {
   technique: 90,  // Excellent technique for the canyons
   heatResistance: 95, // Highly adapted to heat
   experience: 90, // Deep experience in the canyons
+  image: '/images/characters/caballo.jpg', // Corrected image path
 };
 
 export default caballoBlanco;

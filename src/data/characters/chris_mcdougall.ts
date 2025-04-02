@@ -9,6 +9,7 @@ const chrisMcDougall: Character = {
   technique: 70,  // Improving technique
   heatResistance: 60, // Less adapted to heat
   experience: 65, // Gained experience through the journey
+  image: '/images/characters/chris mcdougall.gif', // Corrected image path
 };
 
 export default chrisMcDougall;

@@ -9,6 +9,7 @@ const annTrason: Character = {
   technique: 95,  // Highly efficient runner
   heatResistance: 85, // Well-adapted to heat
   experience: 100, // Legendary ultrarunning experience
+  image: '/images/characters/ann trason.avif', // Corrected image path
 };
 
 export default annTrason;

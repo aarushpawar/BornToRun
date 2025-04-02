@@ -9,6 +9,7 @@ const billyBarnett: Character = {
   technique: 75,  // Solid technique
   heatResistance: 70, // Moderately resistant
   experience: 70, // Good amount of experience, fun-loving
+  image: '/images/characters/billy barnett.jpg', // Corrected image path
 };
 
 export default billyBarnett;

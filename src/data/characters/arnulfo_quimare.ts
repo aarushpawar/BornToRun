@@ -9,6 +9,7 @@ const arnulfoQuimare: Character = {
   technique: 100, // Master of the trails
   heatResistance: 100, // Perfectly adapted
   experience: 85, // Lifelong experience in the canyons
+  image: '/images/characters/arnulfo.jpeg', // Corrected image path
 };
 
 export default arnulfoQuimare;

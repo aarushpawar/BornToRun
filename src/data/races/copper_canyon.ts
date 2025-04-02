@@ -15,6 +15,7 @@ const copperCanyonUltra = {
     'Respect the Tarahumara culture',
   ],
   description: 'A challenging 50-mile ultramarathon through the rugged Copper Canyon in Mexico, home to the Tarahumara people.',
+  image: '/images/races/copper.jpg', // Corrected image path
 };
 
 export default copperCanyonUltra;

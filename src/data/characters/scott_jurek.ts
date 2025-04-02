@@ -1,6 +1,7 @@
 import { Character } from '../../types/game';
 
 const scottJurek: Character = {
+  image: '/images/characters/scott_jurek.jpg', // Corrected image path
   id: 'scott_jurek',
   name: 'Scott Jurek',
   stamina: 120, // World-class endurance

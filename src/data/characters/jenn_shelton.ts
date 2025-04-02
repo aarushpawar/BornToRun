@@ -9,6 +9,7 @@ const jennShelton: Character = {
   technique: 80,  // Good technique
   heatResistance: 65, // Less accustomed to the intense heat
   experience: 75, // Talented but less ultra experience than some
+  image: '/images/characters/jenn shelton.avif', // Corrected image path
 };
 
 export default jennShelton;

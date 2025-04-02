@@ -1,15 +1,19 @@
 "use client";
 
 import React from 'react';
-import copperCanyonUltra from '../data/races/copper_canyon';
 import { useGame } from '../components/GameProvider';
+import RaceSelect from '../components/game/race/RaceSelect';
 import CharacterSelect from '../components/game/character/CharacterSelect';
 
 export default function Home() {
-  const { distanceCovered, timeElapsed, player, currentEvent, gamePhase, makeDecision } = useGame(); // Add makeDecision
+  const { distanceCovered, timeElapsed, player, currentEvent, gamePhase, makeDecision, currentInteraction, selectedRace, currentCheckpointIndex } = useGame(); // Add currentInteraction
 
   if (gamePhase === 'character_select') {
     return <CharacterSelect />;
+  }
+
+  if (gamePhase === 'race_select') {
+    return <RaceSelect />;
   }
 
   if (gamePhase === 'in_race' && player) {
@@ -17,47 +21,41 @@ export default function Home() {
       <div className="container mx-auto h-screen">
         <div className="md:flex h-full">
           <div className="md:w-1/2 p-4 border-2 border-blue-500">
-            {/* Map Area */}
-            <h2 className="text-xl font-bold mb-2">{copperCanyonUltra.name}</h2>
-            <img src="https://via.placeholder.com/400x200" alt="Race Map" className="w-full h-48 object-cover" />
-            <p>Current Location: [Display Location]</p>
+            <h2 className="text-xl font-bold mb-2">Race Progress</h2>
+            <p>Distance: {distanceCovered} miles</p>
+            <p>Time: {Math.floor(timeElapsed / 60)}:{Math.floor(timeElapsed % 60).toString().padStart(2, '0')}</p>
+            {selectedRace && selectedRace.checkpoints[currentCheckpointIndex] && (
+              <p>Next Checkpoint: {selectedRace.checkpoints[currentCheckpointIndex].name}</p>
+            )}
           </div>
+          {currentInteraction && (
+            <div className="p-4 border-2 border-yellow-500 mt-4">
+              <h3 className="text-lg font-semibold">Interaction</h3>
+              <p>
+                <strong>{currentInteraction.character.name}:</strong> {currentInteraction.message}
+              </p>
+            </div>
+          )}
           <div className="md:w-1/2 p-4 border-2 border-green-500">
-            {/* Info/Decision Area */}
-            <div className="mb-4">
-              <h3 className="text-lg font-semibold">Stats ({player.name})</h3>
-              <p>Distance: {distanceCovered} / {copperCanyonUltra.distance}</p>
-              <p>Time: {timeElapsed}</p>
-              <p>Stamina: {player.stamina}</p>
-              <p>Hydration: {player.hydration}</p>
-            </div>
-            <div className="mb-4">
-              <h3 className="text-lg font-semibold">Event</h3>
-              <p>{currentEvent ? currentEvent.description : 'No event'}</p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold">What do you do?</h3>
-              {currentEvent && (
-                <ul className="space-y-2"> {/* Changed ol to ul for styling */}
-                  {currentEvent.options.map((option: {id: string, name: string}) => (
-                    <li key={option.id}>
-                      <button
-                        className="w-full px-4 py-2 border rounded bg-gray-100 hover:bg-gray-200 text-left" // Added text-left
-                        onClick={() => makeDecision(option.id)} // Call makeDecision on click
-                      >
-                        {option.name}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+            <h3 className="text-lg font-semibold">Stats ({player.name})</h3>
+            <p>Stamina: {player.stamina}</p>
+            <p>Hydration: {player.hydration}</p>
+            <h3 className="text-lg font-semibold mt-4">Event</h3>
+            <p>{currentEvent ? currentEvent.description : 'No event'}</p>
+            {currentEvent && (
+              <ul>
+                {currentEvent.options.map((option) => (
+                  <li key={option.id}>
+                    <button onClick={() => makeDecision(option.id)}>{option.name}</button>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
       </div>
     );
   }
 
-  // Handle other game phases or loading state if needed
   return <div>Loading...</div>;
 }

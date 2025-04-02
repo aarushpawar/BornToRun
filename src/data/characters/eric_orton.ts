@@ -9,6 +9,7 @@ const ericOrton: Character = {
   technique: 90,  // Excellent running coach
   heatResistance: 75, // Moderate adaptation
   experience: 95, // Vast coaching experience
+  image: '/images/characters/eric orton.jpg', // Corrected image path
 };
 
 export default ericOrton;
