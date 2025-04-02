@@ -60,6 +60,13 @@ export interface GameContextType {
   distanceCovered: number;
   timeElapsed: number;
   setDistanceCovered: (distance: number) => void;
+  goFaster: () => void;
+  goSlower: () => void;
+  drinkWater: () => void;
+  currentPace: number;
+  projectedFinishTime: string;
+  statusEffects: string[]; // Generic status effects
+  treatStatusEffect: (effect: string) => void; // Generic treat function
   setTimeElapsed: (time: number) => void;
   triggerEvent: (event: Event) => void;
   makeDecision: (decisionId: string) => void;

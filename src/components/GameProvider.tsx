@@ -14,7 +14,6 @@ import chrisMcDougall from '../data/characters/chris_mcdougall';
 import annTrason from '../data/characters/ann_trason';
 import leadville100 from '../data/races/leadville_100';
 import westernStates from '../data/races/western_states';
-import blistersEvent from '../data/events/blisters';
 import characterInteractions, { CharacterInteraction } from '../data/interactions/characterInteractions';
 import pacingDecision from '../data/decisions/pacing';
 
@@ -49,6 +48,10 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
   const [timeElapsed, setTimeElapsed] = useState<number>(0);
   const [distanceCovered, setDistanceCovered] = useState<number>(0);
   const [currentCheckpointIndex, setCurrentCheckpointIndex] = useState<number>(0);
+  const [pace, setPace] = useState<number>(7); // Default pace in minutes per mile
+  const [currentPace, setCurrentPace] = useState<number>(7); // State for current pace
+  const [projectedFinishTime, setProjectedFinishTime] = useState<string>('calculating...');
+  const [statusEffects, setStatusEffects] = useState<string[]>([]); // Generic status effects state
 
   const selectRace = (race: Race) => {
     setSelectedRace(race);
@@ -77,19 +80,38 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     if (gamePhase === 'in_race' && player) {
       intervalId = setInterval(() => {
         setTimeElapsed((prevTime) => prevTime + 1);
-        const basePace = 7; // Fastest pace (minutes per mile)
+        const basePace = pace; // Use dynamic pace
         const statFactor = (player.speed * player.stamina * player.hydration) / 1000000;
         const paceRange = 4; // Range of pace (minutes per mile)
-        const minutesPerMile = basePace + (paceRange * (1 - statFactor)); //Faster runners have a lower minutesPerMile
+        const minutesPerMile = basePace + (paceRange * (1 - statFactor)); // Faster runners have a lower minutesPerMile
+        setCurrentPace(minutesPerMile); // Update current pace
         setDistanceCovered((prevDistance) => {
           const newDistance = parseFloat((prevDistance + (1 / minutesPerMile)).toFixed(1));
-          // Checkpoint logic
           if (selectedRace && currentCheckpointIndex < selectedRace.checkpoints.length) {
+            // Checkpoint logic
             const nextCheckpoint = selectedRace.checkpoints[currentCheckpointIndex];
             if (newDistance >= nextCheckpoint.mile) {
               setCurrentCheckpointIndex(currentCheckpointIndex + 1);
-              triggerEvent(blistersEvent); // Trigger a default event for now
             }
+          }
+
+          // Example status effect trigger - dehydration
+          if (player.hydration <= 20 && !statusEffects.includes('dehydration')) {
+            setStatusEffects([...statusEffects, 'dehydration']);
+          }
+
+          // Example status effect trigger - blisters
+          if (newDistance > 10 && !statusEffects.includes('blisters')) {
+            setStatusEffects([...statusEffects, 'blisters']);
+          }
+
+          // Calculate projected finish time
+          if (selectedRace) {
+            const remainingDistance = selectedRace.distance - newDistance;
+            const projectedMinutesRemaining = remainingDistance * minutesPerMile;
+            const totalProjectedMinutes = timeElapsed + projectedMinutesRemaining;
+            const finishTime = formatTime(totalProjectedMinutes);
+            setProjectedFinishTime(finishTime);
           }
           return newDistance;
         });
@@ -127,6 +149,62 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     }
   };
 
+  const goFaster = () => {
+    setPace((prevPace) => Math.max(prevPace - 1, 6)); // Minimum pace is 6
+    if (player) {
+      setPlayer((prevPlayer) => {
+        if (!prevPlayer) return null;
+        return {
+          ...prevPlayer,
+          stamina: prevPlayer.stamina - 3, // Increased stamina decrease
+          hydration: prevPlayer.hydration - 2, // Increased hydration decrease
+        };
+      });
+       setTimeElapsed((prevTime) => prevTime + 2); // Time penalty for going faster
+    }
+  };
+  const goSlower = () => setPace((prevPace) => Math.max(prevPace + 1, 10)); // Maximum pace is 10 (slower pace = higher minutes per mile)
+  const drinkWater = () => {
+    if (player) {
+      setPlayer((prevPlayer) => {
+        if (!prevPlayer) return null;
+        return {
+          ...prevPlayer,
+          hydration: Math.min(prevPlayer.hydration + 30, 100), // Restore more hydration
+        };
+      });
+       setTimeElapsed((prevTime) => prevTime + 10); // Time penalty for drinking water
+    }
+  };
+
+  const treatStatusEffect = (effectToRemove: string) => {
+    setStatusEffects(statusEffects.filter(effect => effect !== effectToRemove));
+    setTimeElapsed((prevTime) => prevTime + 15); // Treating any status takes 15 minutes
+    if (effectToRemove === 'blisters' && player) {
+      setPlayer((prevPlayer) => {
+        if (!prevPlayer) return null;
+        return {
+          ...prevPlayer,
+          stamina: Math.min(prevPlayer.stamina + 15, 100), // Increased stamina restoration for treating blisters
+        };
+      });
+    } else if (effectToRemove === 'dehydration' && player) {
+      setPlayer((prevPlayer) => {
+        if (!prevPlayer) return null;
+        return {
+          ...prevPlayer,
+          hydration: Math.min(prevPlayer.hydration + 40, 100), // Increased hydration restoration for treating dehydration
+        };
+      });
+    }
+  };
+
+  const formatTime = (minutes: number): string => {
+    const hours = Math.floor(minutes / 60);
+    const mins = Math.floor(minutes % 60);
+    return `${hours}:${mins.toString().padStart(2, '0')}`;
+  };
+
   const value: GameContextType = {
     race,
     selectedRace,
@@ -145,6 +223,13 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
     makeDecision,
     selectRace,
     selectCharacter,
+    currentPace,
+    projectedFinishTime,
+    statusEffects,
+    treatStatusEffect,
+    goFaster,
+    goSlower,
+    drinkWater,
   };
 
   return (
