@@ -24,7 +24,8 @@ export default function QRCodePage() {
       onClick={handleFullscreenClick}
     >
       <h1 className="text-2xl font-bold mb-4">Born To Run</h1>
-      <p className="mb-4">Scan the QR code below to start the game on your mobile device!</p>
+      <p className="mb-4">Scan the QR code below to start the game!</p>
+      <p className="mb-4">You can also just visit https://born-to-run.vercel.app/</p>
       <Image
         src="/images/qrcode.png"
         alt="QR Code"
@@ -37,8 +38,6 @@ export default function QRCodePage() {
         <ul className="list-disc list-inside">
           <li>Select your runner and race.</li>
           <li>Manage your stamina and hydration.</li>
-          <li>Make decisions during events to overcome challenges.</li>
-          <li>Complete the race before time runs out!</li>
         </ul>
       </div>
     </div>
