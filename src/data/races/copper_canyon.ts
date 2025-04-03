@@ -1,7 +1,7 @@
 const copperCanyonUltra = {
   id: 'copper_canyon',
   name: 'Copper Canyon Ultra Marathon',
-  distance: 50, // Miles
+  distance: 50,
   terrain: 'Mixed: Dirt trails, rocky paths, river crossings',
   checkpoints: [
     { mile: 10, name: 'Urique River' },
@@ -15,7 +15,7 @@ const copperCanyonUltra = {
     'Respect the Tarahumara culture',
   ],
   description: 'A challenging 50-mile ultramarathon through the rugged Copper Canyon in Mexico, home to the Tarahumara people.',
-  image: '/images/races/copper.jpg', // Corrected image path
+  image: '/images/races/copper.jpg',
 };
 
 export default copperCanyonUltra;

@@ -6,7 +6,7 @@ import RaceSelect from '../components/game/race/RaceSelect';
 import CharacterSelect from '../components/game/character/CharacterSelect';
 
 export default function Home() {
-    const { distanceCovered, timeElapsed, player, currentEvent, gamePhase, makeDecision, currentInteraction, selectedRace, currentCheckpointIndex, goFaster, goSlower, drinkWater, currentPace, projectedFinishTime, statusEffects, treatStatusEffect } = useGame();
+    const { distanceCovered, timeElapsed, player, gamePhase, currentInteraction, selectedRace, currentCheckpointIndex, goFaster, goSlower, drinkWater, currentPace, projectedFinishTime, statusEffects, treatStatusEffect } = useGame();
 
     if (gamePhase === 'character_select') {
         return <CharacterSelect />;
@@ -19,15 +19,14 @@ export default function Home() {
     if (gamePhase === 'in_race' && player) {
         return (
             <div className="container mx-auto h-screen">
-                
                 <div className="md:flex h-full">
                     <div className="md:w-1/2 p-4 border-2 border-blue-500">
                         <h2 className="text-xl font-bold mb-2">Race Progress</h2>
                         <p>Distance: {distanceCovered} miles</p>
                         <p>Time: {Math.floor(timeElapsed / 60)}:{Math.floor(timeElapsed % 60).toString().padStart(2, '0')}</p>
-                        <p>Pace: {currentPace.toFixed(2)} min/mile</p>
+                        <p>Pace: {Math.floor(currentPace)}:{Math.round((currentPace - Math.floor(currentPace)) * 60).toString().padStart(2, '0')} min/mile</p>
                         <p>Projected Finish: {projectedFinishTime}</p>
-                        {selectedRace && selectedRace.checkpoints[currentCheckpointIndex] && (
+                        {selectedRace?.checkpoints[currentCheckpointIndex] && (
                             <p>Next Checkpoint: {selectedRace.checkpoints[currentCheckpointIndex].name}</p>
                         )}
                     </div>
@@ -43,7 +42,7 @@ export default function Home() {
                         <h3 className="text-lg font-semibold">Stats ({player.name})</h3>
                         <p>Stamina: {player.stamina}</p>
                         <p>Hydration: {player.hydration}</p>
-                        <p>Pace: {currentPace.toFixed(2)} min/mile</p>
+                        <p>Pace: {Math.floor(currentPace)}:{Math.round((currentPace - Math.floor(currentPace)) * 60).toString().padStart(2, '0')} min/mile</p>
                         <h3 className="text-lg font-semibold mt-4">Status Effects</h3>
                         {statusEffects.length > 0 ? (
                             <ul>
@@ -70,22 +69,21 @@ export default function Home() {
                             </div>
                         )}
                         <div className="flex justify-around mt-4">
-                    <button onClick={goFaster} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Push Harder
-                    </button>
-                    <button onClick={goSlower} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                        Take It Easy
-                    </button>
-                    <button onClick={drinkWater} className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
-                        Drink Water
-                    </button>
-                </div>
+                            <button onClick={goFaster} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                Push Harder
+                            </button>
+                            <button onClick={goSlower} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                Take It Easy
+                            </button>
+                            <button onClick={drinkWater} className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
+                                Drink Water
+                            </button>
+                        </div>
                     </div>
                 </div>
-                 
             </div>
         );
     }
 
-    return <div >Loading...</div>;
+    return <div>Loading...</div>;
 }

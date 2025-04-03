@@ -24,9 +24,7 @@ export default function QRCodePage() {
       onClick={handleFullscreenClick}
     >
       <h1 className="text-2xl font-bold mb-4">Born To Run</h1>
-      <p className="mb-4">
-        Scan the QR code below to start the game on your mobile device!
-      </p>
+      <p className="mb-4">Scan the QR code below to start the game on your mobile device!</p>
       <Image
         src="/images/qrcode.png"
         alt="QR Code"
